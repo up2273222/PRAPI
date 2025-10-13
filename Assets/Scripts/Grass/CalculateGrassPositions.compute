@@ -1,0 +1,20 @@
+#pragma kernel generatePoints
+
+
+RWStructuredBuffer<float4> GrassPositionsBufferCompute;
+
+int _resolution;
+int _density;
+
+[numthreads(8,8,1)]
+void generatePoints (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x <uint(_resolution) && id.y < uint(_resolution))
+    {
+        float4 pos = 0.0f;
+        pos.y = 1.0f;
+        pos.xz = (id.xy - float(_resolution) * 0.5f) * (1.0f / float(_density));
+        pos.w = 1.0f;
+        GrassPositionsBufferCompute[id.x + id.y * _resolution] = pos;
+    }
+}
