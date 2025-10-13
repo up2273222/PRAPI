@@ -14,12 +14,21 @@ namespace Grass
         
         public Material grassMaterial;
         public Mesh grassMesh;
+
+        private Bounds bounds;
+        
+        
         
         private static readonly int GrassPositionsBufferCompute = Shader.PropertyToID("GrassPositionsBufferCompute");
         private static readonly int Resolution = Shader.PropertyToID("_resolution");
         private static readonly int Density = Shader.PropertyToID("_density");
         private static readonly int GrassPositionsBufferShader = Shader.PropertyToID("GrassPositionsBufferShader");
 
+
+        private void Start()
+        {
+             bounds = new Bounds(Vector3.zero, new Vector3(grassResolution, grassResolution, grassResolution));
+        }
 
         private void OnEnable()
         {
@@ -39,7 +48,7 @@ namespace Grass
 
         private void Update()
         {
-            Graphics.DrawMeshInstancedProcedural(grassMesh,0,grassMaterial,new Bounds(Vector3.zero, Vector3.one * (2f + 2f / grassResolution)), GrassPositionsBufferDraw.count);
+            Graphics.DrawMeshInstancedProcedural(grassMesh,0,grassMaterial,bounds, GrassPositionsBufferDraw.count);
         }
     }
 }

@@ -18,6 +18,7 @@ Shader "Custom/GrassShader"
 
             #include "UnityCG.cginc"
             #include "AutoLight.cginc"
+            #include "UnityStandardBRDF.cginc"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
@@ -53,7 +54,11 @@ Shader "Custom/GrassShader"
             fixed4 frag (v2f i) : SV_Target
             {
                 float4 col = tex2D(_MainTex,i.uv);
-                return col;
+                clip(-(0.5 - col.a));
+                float3 lightDir = _WorldSpaceLightPos0.xyz;
+                float ndotl = DotClamped(lightDir, normalize(float3(0, 1, 0)));
+                
+                return col * ndotl;
             }
             ENDCG
         }
