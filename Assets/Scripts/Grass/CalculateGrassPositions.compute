@@ -1,5 +1,7 @@
 #pragma kernel generatePoints
 
+#include "noiseSimplex.cginc"
+
 
 RWStructuredBuffer<float4> GrassPositionsBufferCompute;
 
@@ -15,6 +17,13 @@ void generatePoints (uint3 id : SV_DispatchThreadID)
         pos.y = 1.0f;
         pos.xz = (id.xy - float(_resolution) * 0.5f) * (1.0f / float(_density));
         pos.w = 1.0f;
+
+        pos.x += snoise(float3 (pos.xz,0.0f)*3.0f)* 0.3f;
+        pos.z += snoise(float3 (pos.xz,0.0f)*4.0f)* 0.3f;
+        
+
+
+        
         GrassPositionsBufferCompute[id.x + id.y * _resolution] = pos;
     }
 }

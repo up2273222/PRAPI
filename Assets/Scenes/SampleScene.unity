@@ -1002,10 +1002,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Grass.DrawGrass
   grassCompute: {fileID: 7200000, guid: 50215580ce42798449f44525e4c2f468, type: 3}
   grassResolution: 200
-  grassDensity: 1
+  grassDensity: 2
   grassMaterial: {fileID: 2100000, guid: 3bd33e09d23a6a44b8ff6af84874ac66, type: 2}
   grassMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  rotation: 60
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

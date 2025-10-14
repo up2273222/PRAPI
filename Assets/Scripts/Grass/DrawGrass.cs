@@ -10,7 +10,7 @@ namespace Grass
         private ComputeBuffer GrassPositionsBufferDraw;
 
         public int grassResolution;
-        public float grassDensity;
+        public int grassDensity;
         
         public Material grassMaterial;
         public Mesh grassMesh;
@@ -25,6 +25,7 @@ namespace Grass
         private static readonly int Resolution = Shader.PropertyToID("_resolution");
         private static readonly int Density = Shader.PropertyToID("_density");
         private static readonly int GrassPositionsBufferShader = Shader.PropertyToID("GrassPositionsBufferShader");
+        private static readonly int Rotation = Shader.PropertyToID("_Rotation");
 
 
         private void Start()
@@ -50,7 +51,7 @@ namespace Grass
 
         private void Update()
         {
-            grassMaterial.SetFloat("_Rotation", rotation);
+            grassMaterial.SetFloat(Rotation, rotation);
 
             int instanceCount = GrassPositionsBufferDraw.count * 3;
             
