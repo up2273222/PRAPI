@@ -16,6 +16,8 @@ namespace Grass
         public Mesh grassMesh;
 
         private Bounds bounds;
+
+        private float rotation = 60;
         
         
         
@@ -48,7 +50,12 @@ namespace Grass
 
         private void Update()
         {
-            Graphics.DrawMeshInstancedProcedural(grassMesh,0,grassMaterial,bounds, GrassPositionsBufferDraw.count);
+            grassMaterial.SetFloat("_Rotation", rotation);
+
+            int instanceCount = GrassPositionsBufferDraw.count * 3;
+            
+            Graphics.DrawMeshInstancedProcedural(grassMesh,0,grassMaterial,bounds, instanceCount);
+            
         }
     }
 }

@@ -22,6 +22,9 @@ Shader "Custom/GrassShader"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            float _Rotation;
+
+            
 
             StructuredBuffer<float4> GrassPositionsBufferShader;
 
@@ -37,14 +40,32 @@ Shader "Custom/GrassShader"
                 float4 vertex : SV_POSITION;
             };
             
+
+              float4 RotateAroundYInDegrees (float4 vertex, float degrees)
+            {
+                float alpha = degrees * UNITY_PI / 180.0;
+                float sina, cosa;
+                sincos(alpha, sina, cosa);
+                float2x2 m = float2x2(cosa, -sina, sina, cosa);
+                return float4(mul(m, vertex.xz), vertex.yw).xzyw;
+            }
+
+
+            
+            
              v2f vert (MeshData v, uint instanceID : SV_INSTANCEID)
             {
                 v2f o;
-                
-                float3 localPosition  = v.vertex.xyz;
-                float4 worldPosition = float4(GrassPositionsBufferShader[instanceID].xyz + localPosition, 1.0f);
 
-                worldPosition.y *= GrassPositionsBufferShader[instanceID].w;
+                uint grassIndex = instanceID / 3;
+                uint quadIndex  = instanceID % 3;
+                  
+
+                  
+                float3 localPosition  = (RotateAroundYInDegrees(v.vertex,_Rotation * quadIndex));
+                float4 worldPosition = float4(GrassPositionsBufferShader[grassIndex].xyz + localPosition, 1.0f);
+
+                worldPosition.y *= GrassPositionsBufferShader[grassIndex].w;
                 
                 o.vertex = UnityObjectToClipPos(worldPosition);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
