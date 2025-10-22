@@ -10,6 +10,12 @@ struct MeshData {
 RWStructuredBuffer<MeshData> meshBuffer;
 RWStructuredBuffer<uint> meshTriangles;
 
+Texture2D<float4> _heightMapTex;
+SamplerState sampler_heightMapTex;
+
+float _displacementStrength;
+uint texWidth, texHeight;
+
 uint gridSize;
 
 
@@ -23,11 +29,16 @@ void generateTerrain (uint3 id : SV_DispatchThreadID)
         
         float2 uv = float2(id.x, id.y) / (gridSize -1);
 
+        float2 heightMapuv = (id.xy + 0.5f) / float2(texWidth, texHeight);
+
         float3 position = float3(
             (uv.x * gridSize) ,
             0.0,
             (uv.y * gridSize) 
             );
+
+        float heightDisplacement = _heightMapTex.SampleLevel(sampler_heightMapTex,heightMapuv,0).r;
+        position.y += heightDisplacement * _displacementStrength;
 
         meshBuffer[index].position = position;
         meshBuffer[index].uv = uv;

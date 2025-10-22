@@ -22,6 +22,8 @@ public class DispatchTerrainCompute : MonoBehaviour
 
   private ComputeBuffer _meshBuffer;
   private ComputeBuffer _triangleBuffer;
+
+  [SerializeField, Range(0.1f, 200f)] private float displacementStrength;
   
 
   private const int MeshDataStride = sizeof(float) * (3 + 2);
@@ -29,6 +31,16 @@ public class DispatchTerrainCompute : MonoBehaviour
   
   private Mesh _mesh;
   public Material terrainMaterial;
+  
+  public Texture2D heightMapTexture;
+  
+  
+  //Debug
+  //----------------------------------------------------------------------------------------
+  private float lastDisplacement;
+
+  public bool rebuildInEditor = false;
+  //----------------------------------------------------------------------------------------
 
   private void OnEnable()
   {
@@ -43,7 +55,18 @@ public class DispatchTerrainCompute : MonoBehaviour
 
   private void Start()
   {
-    
+    lastDisplacement = displacementStrength;
+  }
+
+  private void Update()
+  {
+    if (!Mathf.Approximately(displacementStrength, lastDisplacement) && rebuildInEditor)
+    {
+      lastDisplacement = displacementStrength;
+      DispatchCompute();
+      GenerateTerrain();
+      
+    }
   }
 
 
@@ -57,6 +80,13 @@ public class DispatchTerrainCompute : MonoBehaviour
     _triangleBuffer = new ComputeBuffer((_gridSize * _gridSize) * 6, TrianglesStride);
     
     terrainCompute.SetInt("gridSize", _gridSize);
+    terrainCompute.SetInt("texWidth",heightMapTexture.width);
+    terrainCompute.SetInt("texHeight", heightMapTexture.height);
+    terrainCompute.SetTexture(0,"_heightMapTex", heightMapTexture);
+    terrainCompute.SetFloat("_displacementStrength",displacementStrength);
+    
+    
+    
     terrainCompute.SetBuffer(0, "meshBuffer", _meshBuffer);
     terrainCompute.SetBuffer(1, "meshTriangles", _triangleBuffer);
     

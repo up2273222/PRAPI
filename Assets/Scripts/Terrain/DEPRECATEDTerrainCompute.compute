@@ -7,8 +7,8 @@ RWStructuredBuffer<float3> TerrainPointsBufferCompute;
 
 Texture2D<float4> _heightMapTex;
 SamplerState sampler_heightMapTex;
-float _displacementStrength;
 
+float _displacementStrength;
 uint texWidth, texHeight;
 
 
