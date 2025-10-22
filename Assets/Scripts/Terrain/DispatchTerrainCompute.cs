@@ -109,6 +109,7 @@ public class DispatchTerrainCompute : MonoBehaviour
     _mesh.RecalculateBounds();
     GetComponent<MeshRenderer>().material = terrainMaterial;
     GetComponent<MeshFilter>().mesh = _mesh;
+   GetComponent<MeshCollider>().sharedMesh = _mesh;
     
     
       
