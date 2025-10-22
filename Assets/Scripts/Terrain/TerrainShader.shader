@@ -25,7 +25,7 @@ Shader "Custom/TerrainShader"
 
             
 
-            StructuredBuffer<float3> TerrainPointsBufferShader;
+           // StructuredBuffer<float3> TerrainPointsBufferShader;
 
             struct MeshData
             {
@@ -48,9 +48,15 @@ Shader "Custom/TerrainShader"
             {
                  v2f o;
 
-                 float3 pos = TerrainPointsBufferShader[instanceID];
-                 o.vertex = UnityObjectToClipPos(pos);
+              
+                
+
+                 o.vertex = UnityObjectToClipPos(v.vertex);
+
+                
+                 
                  o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                 
 
                  return o;
                  
@@ -64,6 +70,7 @@ Shader "Custom/TerrainShader"
                 float ndotl = DotClamped(lightDir, normalize(float3(0, 1, 0)));
                 
                 return col * ndotl;
+               // return float4(i.uv,0,1);
             }
             ENDCG
         }

@@ -11,52 +11,36 @@ namespace Terrain
         private int ySize = 200;
 
         private Vector3[] _vertices;
-
-        public Texture2D heightMap;
-
-        private float displacementStrength = 100f;
- 
         
         private void Awake()
         {
             GenerateTerrain();
         }
 
-       
-
-
         private void GenerateTerrain()
         {
             Mesh mesh = GetComponent<MeshFilter>().mesh = new Mesh();
             mesh.name = "Terrain";
             
-            
             //Create empty vertices array
             _vertices = new Vector3[(xSize + 1) * (ySize + 1)];
-
-           
-            
-            
             
             //Populate array with points
             for (int i = 0, y = 0; y <= ySize; y++) 
             {
                 for (int x = 0; x <= xSize; x++, i++)
                 {
-                    float uCoord = (float)x / xSize;
-                    float vCoord = (float)y / ySize;
 
 
 
 
 
-                    float displacement = heightMap.GetPixelBilinear(uCoord, vCoord).r * displacementStrength;
-                    _vertices[i] = new Vector3(x,displacement,y);
+                   
+                    _vertices[i] = new Vector3(x,y);
                 }
             }
             
             mesh.vertices = _vertices;
-            
             
 
             int[] triangles = new int[xSize * ySize * 6];
@@ -72,12 +56,6 @@ namespace Terrain
             }
             mesh.triangles = triangles;
             mesh.RecalculateNormals();
-            
-           
-
         }
-        
-       
-        
     }
 }

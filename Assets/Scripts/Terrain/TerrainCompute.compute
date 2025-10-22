@@ -1,35 +1,59 @@
-#pragma kernel assignTerrainPoints
+#pragma kernel generateTerrain;
 
+#pragma kernel generateTriangles;
 
-int _size = 300;
+struct MeshData {
+    float3 position;
+    float2 uv;
+};
 
-RWStructuredBuffer<float3> TerrainPointsBufferCompute;
+RWStructuredBuffer<MeshData> meshBuffer;
+RWStructuredBuffer<uint> meshTriangles;
 
-Texture2D<float4> _heightMapTex;
-SamplerState sampler__heightMapTex;
-float _displacementStrength;
-
-uint texWidth, texHeight;
+uint gridSize;
 
 
 
 [numthreads(8,8,1)]
-void assignTerrainPoints (uint3 id : SV_DispatchThreadID)
+void generateTerrain (uint3 id : SV_DispatchThreadID)
 {
-    if (id.x < uint(_size) && id.y < uint(_size))
+    if (id.x <uint(gridSize) && id.y < uint(gridSize))
     {
-        float3 pos = 0.0f;
-
-        pos.xz = (id.xy - float(_size) * 0.5f);
+        uint index = id.y * gridSize + id.x;;
         
+        float2 uv = float2(id.x, id.y) / (gridSize -1);
 
-        float2 uv = (id.xy + 0.5f) / float2(texWidth, texHeight);
+        float3 position = float3(
+            (uv.x * gridSize) ,
+            0.0,
+            (uv.y * gridSize) 
+            );
 
-        float3 heightDisplacement = _heightMapTex.SampleLevel(sampler__heightMapTex,uv,0);
-
-        pos.y = heightDisplacement * _displacementStrength;
-        
-        TerrainPointsBufferCompute[id.x + id.y * _size] = pos;
+        meshBuffer[index].position = position;
+        meshBuffer[index].uv = uv;
     }
-    
+
+}
+
+[numthreads(8,8,1)]
+void generateTriangles (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x < gridSize - 1 && id.y < gridSize - 1)
+    {
+        uint index = id.y * (gridSize-1) + id.x;
+        uint triangleIndex = index * 6;
+
+        uint i0 = id.y  * gridSize + id.x;
+        uint i1 = i0 + 1;
+        uint i2 = i0 + gridSize;
+        uint i3 = i2 + 1;
+
+        meshTriangles[triangleIndex] = i0;
+        meshTriangles[triangleIndex + 1] = i2;
+        meshTriangles[triangleIndex + 2] = i1;
+
+        meshTriangles[triangleIndex + 3] = i1;
+        meshTriangles[triangleIndex + 4] = i2;
+        meshTriangles[triangleIndex + 5] = i3;
+    }
 }
