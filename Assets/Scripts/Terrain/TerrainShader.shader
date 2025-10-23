@@ -70,7 +70,7 @@ Shader "Custom/TerrainShader"
                 float ndotl = DotClamped(lightDir, normalize(float3(0, 1, 0)));
                 
                 return col * ndotl;
-                //return float4(i.uv,0,1);
+              //  return float4(i.uv,0,1);
             }
             ENDCG
         }

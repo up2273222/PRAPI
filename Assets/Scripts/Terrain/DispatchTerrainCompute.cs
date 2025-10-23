@@ -80,8 +80,7 @@ public class DispatchTerrainCompute : MonoBehaviour
     _triangleBuffer = new ComputeBuffer((_gridSize * _gridSize) * 6, TrianglesStride);
     
     terrainCompute.SetInt("gridSize", _gridSize);
-    terrainCompute.SetInt("texWidth",heightMapTexture.width);
-    terrainCompute.SetInt("texHeight", heightMapTexture.height);
+
     terrainCompute.SetTexture(0,"_heightMapTex", heightMapTexture);
     terrainCompute.SetFloat("_displacementStrength",displacementStrength);
     

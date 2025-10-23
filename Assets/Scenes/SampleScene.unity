@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!143 &3752722
 CharacterController:
   m_ObjectHideFlags: 0
@@ -321,7 +321,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &330585544
 AudioListener:
   m_ObjectHideFlags: 0
@@ -778,7 +778,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1034130515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1022,7 +1022,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DispatchTerrainCompute
   terrainCompute: {fileID: 7200000, guid: 95624b81fd0845c42ad2d4c1de7154b5, type: 3}
+  displacementStrength: 0.1
   terrainMaterial: {fileID: 2100000, guid: 7463779bb5afc75439fb39f580813530, type: 2}
+  heightMapTexture: {fileID: 2800000, guid: d3b5167b50f398c46baf7c1f9300bbe7, type: 3}
+  rebuildInEditor: 0
 --- !u!23 &1950103288
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1100,7 +1103,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
