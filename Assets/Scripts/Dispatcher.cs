@@ -13,7 +13,7 @@ public class Dispatcher : MonoBehaviour
   //Compute Buffers
   private ComputeBuffer _meshBuffer;
   private ComputeBuffer _triangleBuffer;
-  private ComputeBuffer GrassPositionsBufferDraw;
+  private ComputeBuffer _grassPositionsBufferDraw;
   
  
   //Shared variables
@@ -41,8 +41,8 @@ public class Dispatcher : MonoBehaviour
   private const int TrianglesStride = sizeof(uint);
   
   //Grass variables
-  private int _grassResolution = 200;
-  public int grassDensity;
+  public int _grassResolution = 512;
+
         
   public Material grassMaterial;
   public Mesh grassMesh;
@@ -88,12 +88,13 @@ public class Dispatcher : MonoBehaviour
     {
       lastDisplacement = displacementStrength;
       DispatchTerrainCompute();
+      DispatchGrassCompute();
       GenerateTerrain();
       
     }
     grassMaterial.SetFloat("_Rotation", rotation);
 
-    int instanceCount = GrassPositionsBufferDraw.count * 3;
+    int instanceCount = _grassPositionsBufferDraw.count * 3;
             
     Graphics.DrawMeshInstancedProcedural(grassMesh,0,grassMaterial,bounds, instanceCount);
   }
@@ -134,19 +135,29 @@ public class Dispatcher : MonoBehaviour
   
   private void DispatchGrassCompute()
   {
-    GrassPositionsBufferDraw = new ComputeBuffer(_grassResolution * _grassResolution, sizeof(float) * 4);
-    grassCompute.SetBuffer(0, "GrassPositionsBufferCompute", GrassPositionsBufferDraw);
+    _grassPositionsBufferDraw = new ComputeBuffer(_grassResolution * _grassResolution, sizeof(float) * 4);
+    
+    grassCompute.SetBuffer(0, "GrassPositionsBufferCompute", _grassPositionsBufferDraw);
     grassCompute.SetInt("_resolution", _grassResolution);
-    grassCompute.SetFloat("_density", grassDensity);
+    
+    grassCompute.SetTexture(0,"_heightMapTex", heightMapTexture);
+    grassCompute.SetFloat("_displacementStrength",displacementStrength);
+
+    int worldArea = _gridSize;
+    grassCompute.SetInt("_worldArea", worldArea);
+    
     int numGroups = Mathf.CeilToInt((float)_grassResolution / (8));
+    
     grassCompute.Dispatch(0,numGroups, numGroups, 1);
-    grassMaterial.SetBuffer("GrassPositionsBufferShader", GrassPositionsBufferDraw);
+    
+    grassMaterial.SetBuffer("GrassPositionsBufferShader", _grassPositionsBufferDraw);
   }
 
   private void ClearTerrainCompute()
   {
     _triangleBuffer.Release();
     _meshBuffer.Release();
+    
     _triangleBuffer = null;
     _meshBuffer = null;
     
@@ -156,8 +167,9 @@ public class Dispatcher : MonoBehaviour
   
   private void ClearGrassCompute()
   {
-    GrassPositionsBufferDraw.Release();
-    GrassPositionsBufferDraw = null;
+    _grassPositionsBufferDraw.Release();
+    
+    _grassPositionsBufferDraw = null;
   }
 
   private void GenerateTerrain()

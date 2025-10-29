@@ -6,16 +6,29 @@
 RWStructuredBuffer<float4> GrassPositionsBufferCompute;
 
 int _resolution;
-int _density;
+int _worldArea;
+
+Texture2D<float4> _heightMapTex;
+SamplerState sampler_heightMapTex;
+float _displacementStrength;
 
 [numthreads(8,8,1)]
 void generatePoints (uint3 id : SV_DispatchThreadID)
 {
     if (id.x <uint(_resolution) && id.y < uint(_resolution))
     {
+        float worldScale = 1.0f/float(_resolution);
+
+        float2 uv = float2(id.x, id.y)  * worldScale;
+
         float4 pos = 0.0f;
+        
         pos.y = 1.0f;
-        pos.xz = (id.xy - float(_resolution) * 0.5f) * (1.0f / float(_density));
+
+        float heightDisplacement = _heightMapTex.SampleLevel(sampler_heightMapTex,uv,0).r;
+        pos.y += heightDisplacement * _displacementStrength;
+        
+        pos.xz = (id.xy - float(_resolution) * 0.5f) * worldScale * _worldArea;
         pos.w = 1.0f;
 
         pos.x += snoise(float3 (pos.xz,0.0f)*3.0f)* 0.3f;

@@ -12,7 +12,6 @@ RWStructuredBuffer<uint> meshTriangles;
 
 Texture2D<float4> _heightMapTex;
 SamplerState sampler_heightMapTex;
-
 float _displacementStrength;
 
 
