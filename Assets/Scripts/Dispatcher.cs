@@ -2,15 +2,29 @@ using System;
 using UnityEngine;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 
-public class DispatchTerrainCompute : MonoBehaviour
+public class Dispatcher : MonoBehaviour
 {
+  
+  //Compute Shaders
   public ComputeShader terrainCompute;
+  public ComputeShader grassCompute;
   
-
-
-  private int _gridSize = 200;
   
-  [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+  //Compute Buffers
+  private ComputeBuffer _meshBuffer;
+  private ComputeBuffer _triangleBuffer;
+  private ComputeBuffer GrassPositionsBufferDraw;
+  
+ 
+  //Shared variables
+  [SerializeField, Range(0.1f, 200f)] public float displacementStrength;
+  private readonly int _gridSize = 200;
+  public Texture2D heightMapTexture;
+  
+  
+ //Terrain variables
+  
+  [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)] 
   private struct MeshData {
     public Vector3 position;
     public Vector2 uv;
@@ -20,19 +34,26 @@ public class DispatchTerrainCompute : MonoBehaviour
   
   private MeshData[] _meshData;
 
-  private ComputeBuffer _meshBuffer;
-  private ComputeBuffer _triangleBuffer;
-
-  [SerializeField, Range(0.1f, 200f)] private float displacementStrength;
-  
-
-  private const int MeshDataStride = sizeof(float) * (3 + 2);
-  private const int TrianglesStride = sizeof(uint);
-  
   private Mesh _mesh;
   public Material terrainMaterial;
   
-  public Texture2D heightMapTexture;
+  private const int MeshDataStride = sizeof(float) * (3 + 2);
+  private const int TrianglesStride = sizeof(uint);
+  
+  //Grass variables
+  private int _grassResolution = 200;
+  public int grassDensity;
+        
+  public Material grassMaterial;
+  public Mesh grassMesh;
+
+  private Bounds bounds;
+
+  private float rotation = 60;
+  
+ 
+  
+
   
   
   //Debug
@@ -44,18 +65,21 @@ public class DispatchTerrainCompute : MonoBehaviour
 
   private void OnEnable()
   {
-    DispatchCompute();
+    DispatchTerrainCompute();
+    DispatchGrassCompute();
     GenerateTerrain();
   }
 
   private void OnDisable()
   {
-    ClearCompute();
+    ClearGrassCompute();
+    ClearTerrainCompute();
   }
 
   private void Start()
   {
     lastDisplacement = displacementStrength;
+    bounds = new Bounds(Vector3.zero, new Vector3(_grassResolution, _grassResolution, _grassResolution));
   }
 
   private void Update()
@@ -63,14 +87,19 @@ public class DispatchTerrainCompute : MonoBehaviour
     if (!Mathf.Approximately(displacementStrength, lastDisplacement) && rebuildInEditor)
     {
       lastDisplacement = displacementStrength;
-      DispatchCompute();
+      DispatchTerrainCompute();
       GenerateTerrain();
       
     }
+    grassMaterial.SetFloat("_Rotation", rotation);
+
+    int instanceCount = GrassPositionsBufferDraw.count * 3;
+            
+    Graphics.DrawMeshInstancedProcedural(grassMesh,0,grassMaterial,bounds, instanceCount);
   }
 
 
-  private void DispatchCompute()
+  private void DispatchTerrainCompute()
   {
     
     _meshData = new MeshData[_gridSize * _gridSize];
@@ -102,8 +131,19 @@ public class DispatchTerrainCompute : MonoBehaviour
     _meshBuffer.Release();
     _triangleBuffer.Release();
   }
+  
+  private void DispatchGrassCompute()
+  {
+    GrassPositionsBufferDraw = new ComputeBuffer(_grassResolution * _grassResolution, sizeof(float) * 4);
+    grassCompute.SetBuffer(0, "GrassPositionsBufferCompute", GrassPositionsBufferDraw);
+    grassCompute.SetInt("_resolution", _grassResolution);
+    grassCompute.SetFloat("_density", grassDensity);
+    int numGroups = Mathf.CeilToInt((float)_grassResolution / (8));
+    grassCompute.Dispatch(0,numGroups, numGroups, 1);
+    grassMaterial.SetBuffer("GrassPositionsBufferShader", GrassPositionsBufferDraw);
+  }
 
-  private void ClearCompute()
+  private void ClearTerrainCompute()
   {
     _triangleBuffer.Release();
     _meshBuffer.Release();
@@ -112,6 +152,12 @@ public class DispatchTerrainCompute : MonoBehaviour
     
     _meshData = null;
     _triangles = null;
+  }
+  
+  private void ClearGrassCompute()
+  {
+    GrassPositionsBufferDraw.Release();
+    GrassPositionsBufferDraw = null;
   }
 
   private void GenerateTerrain()
@@ -138,11 +184,11 @@ public class DispatchTerrainCompute : MonoBehaviour
     _mesh.RecalculateBounds();
     GetComponent<MeshRenderer>().material = terrainMaterial;
     GetComponent<MeshFilter>().mesh = _mesh;
-   GetComponent<MeshCollider>().sharedMesh = _mesh;
-    
-    
-      
-
+    GetComponent<MeshCollider>().sharedMesh = _mesh;
   }
+  
+ 
+
+  
   
 }

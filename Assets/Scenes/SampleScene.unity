@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!143 &3752722
 CharacterController:
   m_ObjectHideFlags: 0
@@ -321,7 +321,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &330585544
 AudioListener:
   m_ObjectHideFlags: 0
@@ -778,7 +778,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1034130515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -965,10 +965,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1950103285}
-  - component: {fileID: 1950103286}
+  - component: {fileID: 1950103287}
   - component: {fileID: 1950103289}
   - component: {fileID: 1950103288}
-  - component: {fileID: 1950103287}
   - component: {fileID: 1950103290}
   m_Layer: 0
   m_Name: Manager
@@ -992,23 +991,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1950103286
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1950103284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 284e3900c85256846bd923fbef484842, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Grass.DrawGrass
-  grassCompute: {fileID: 7200000, guid: 50215580ce42798449f44525e4c2f468, type: 3}
-  grassResolution: 200
-  grassDensity: 1
-  grassMaterial: {fileID: 2100000, guid: 3bd33e09d23a6a44b8ff6af84874ac66, type: 2}
-  grassMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &1950103287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1022,9 +1004,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DispatchTerrainCompute
   terrainCompute: {fileID: 7200000, guid: 95624b81fd0845c42ad2d4c1de7154b5, type: 3}
+  grassCompute: {fileID: 7200000, guid: 50215580ce42798449f44525e4c2f468, type: 3}
   displacementStrength: 0.1
+  heightMapTexture: {fileID: 2800000, guid: 4bb48ab01669f8e4089e22c2cadb5921, type: 3}
   terrainMaterial: {fileID: 2100000, guid: 7463779bb5afc75439fb39f580813530, type: 2}
-  heightMapTexture: {fileID: 2800000, guid: d3b5167b50f398c46baf7c1f9300bbe7, type: 3}
+  grassDensity: 2
+  grassMaterial: {fileID: 2100000, guid: 3bd33e09d23a6a44b8ff6af84874ac66, type: 2}
+  grassMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   rebuildInEditor: 0
 --- !u!23 &1950103288
 MeshRenderer:
