@@ -61,6 +61,9 @@ public class Dispatcher : MonoBehaviour
   private float lastDisplacement;
 
   public bool rebuildInEditor = false;
+
+
+  private Vector4[] grassDebug;
   //----------------------------------------------------------------------------------------
 
   private void OnEnable()
@@ -68,6 +71,16 @@ public class Dispatcher : MonoBehaviour
     DispatchTerrainCompute();
     DispatchGrassCompute();
     GenerateTerrain();
+    
+    Vector4[] debugGrassPositions =  new Vector4[_grassPositionsBufferDraw.count];
+    _grassPositionsBufferDraw.GetData(debugGrassPositions);
+    
+    for (int i = 0; i < 1000; i++)
+    {
+      Debug.Log(debugGrassPositions[i].w);
+    }
+   
+    
   }
 
   private void OnDisable()
@@ -151,6 +164,8 @@ public class Dispatcher : MonoBehaviour
     grassCompute.Dispatch(0,numGroups, numGroups, 1);
     
     grassMaterial.SetBuffer("GrassPositionsBufferShader", _grassPositionsBufferDraw);
+    
+   
   }
 
   private void ClearTerrainCompute()

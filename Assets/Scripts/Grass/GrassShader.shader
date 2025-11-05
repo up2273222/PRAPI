@@ -3,6 +3,8 @@ Shader "Custom/GrassShader"
   Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _YoungGrassColour ("YoungGrassColour", Color) = (1,1,1,1)
+        _OldGrassColour ("OldGrassColour", Color) = (0,1,0,1)
     }
     SubShader
     {
@@ -24,6 +26,9 @@ Shader "Custom/GrassShader"
             float4 _MainTex_ST;
             float _Rotation;
 
+            fixed4 _YoungGrassColour;
+            fixed4 _OldGrassColour;
+
             
 
             StructuredBuffer<float4> GrassPositionsBufferShader;
@@ -32,16 +37,18 @@ Shader "Custom/GrassShader"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                uint instanceid : TEXCOORD1;
             };
 
             struct v2f
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
+                uint instanceid : TEXCOORD1;
             };
             
 
-              float4 RotateAroundYInDegrees (float4 vertex, float degrees)
+              float4 RotateAroundYAxis (float4 vertex, float degrees)
             {
                 float alpha = degrees * UNITY_PI / 180.0;
                 float sina, cosa;
@@ -56,19 +63,24 @@ Shader "Custom/GrassShader"
              v2f vert (MeshData v, uint instanceID : SV_INSTANCEID)
             {
                 v2f o;
+                o.instanceid = instanceID;
+                  
 
                 uint grassIndex = instanceID / 3;
                 uint quadIndex  = instanceID % 3;
                   
 
                   
-                float3 localPosition  = (RotateAroundYInDegrees(v.vertex,_Rotation * quadIndex));
-                float4 worldPosition = float4(GrassPositionsBufferShader[grassIndex].xyz + localPosition, 1.0f);
+                float3 localPosition  = (RotateAroundYAxis(v.vertex,_Rotation * quadIndex));
+                float4 worldPosition = float4(GrassPositionsBufferShader[grassIndex].xyz + localPosition, 0.0f);
 
-                worldPosition.y *= GrassPositionsBufferShader[grassIndex].w;
+                  o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                  worldPosition.y += o.uv.y * (GrassPositionsBufferShader[grassIndex].w * 1);
+                  worldPosition.y -= 0.5;
+
                 
                 o.vertex = UnityObjectToClipPos(worldPosition);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+              
                 return o;
             }
 
@@ -78,8 +90,13 @@ Shader "Custom/GrassShader"
                 clip(-(0.5 - col.a));
                 float3 lightDir = _WorldSpaceLightPos0.xyz;
                 float ndotl = DotClamped(lightDir, normalize(float3(0, 1, 0)));
-                
+
+                uint grassIndex = i.instanceid / 3;
+
+                col.g -= (GrassPositionsBufferShader[grassIndex].w)/2;
                 return col * ndotl;
+                //return float4(i.uv,0,1);
+               // return float4(lerp(_YoungGrassColour,_OldGrassColour,GrassPositionsBufferShader[grassIndex].w));
             }
             ENDCG
         }

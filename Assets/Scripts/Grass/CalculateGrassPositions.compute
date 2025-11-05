@@ -29,10 +29,16 @@ void generatePoints (uint3 id : SV_DispatchThreadID)
         pos.y += heightDisplacement * _displacementStrength;
         
         pos.xz = (id.xy - float(_resolution) * 0.5f) * worldScale * _worldArea;
-        pos.w = 1.0f;
 
-        pos.x += snoise(float3 (pos.xz,0.0f)*3.0f)* 0.3f;
-        pos.z += snoise(float3 (pos.xz,0.0f)*4.0f)* 0.3f;
+        float noiseFrequency = 0.06f;
+        float noiseValue = snoise(pos.xz * noiseFrequency);
+        
+        pos.w = ((noiseValue + 1.0f) * 0.5f);
+
+        pos.x += noiseValue;
+        pos.z += noiseValue;
+
+       
         
 
 

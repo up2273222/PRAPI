@@ -11,7 +11,13 @@ RWStructuredBuffer<MeshData> meshBuffer;
 RWStructuredBuffer<uint> meshTriangles;
 
 Texture2D<float4> _heightMapTex;
+
+
 SamplerState sampler_heightMapTex;
+
+
+
+
 float _displacementStrength;
 
 
@@ -35,6 +41,8 @@ void generateTerrain (uint3 id : SV_DispatchThreadID)
             );
 
         float heightDisplacement = _heightMapTex.SampleLevel(sampler_heightMapTex,uv,0).r;
+    
+        
         position.y += heightDisplacement * _displacementStrength;
 
         meshBuffer[index].position = position;
