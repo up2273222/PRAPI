@@ -18,6 +18,7 @@ public class Dispatcher : MonoBehaviour
  
   //Shared variables
   [SerializeField, Range(0.1f, 200f)] public float displacementStrength;
+  [SerializeField] private Camera _mainCamera;
   private readonly int _gridSize = 200;
   public Texture2D heightMapTexture;
   
@@ -40,6 +41,7 @@ public class Dispatcher : MonoBehaviour
   private const int MeshDataStride = sizeof(float) * (3 + 2);
   private const int TrianglesStride = sizeof(uint);
   
+  
   //Grass variables
   public int _grassResolution = 512;
 
@@ -50,6 +52,18 @@ public class Dispatcher : MonoBehaviour
   private Bounds bounds;
 
   private float rotation = 60;
+
+
+
+
+  private GraphicsBuffer _instanceBuffer;
+  private GraphicsBuffer _argsBuffer;
+  private GraphicsBuffer.IndirectDrawIndexedArgs[] _argsData;
+  
+  private const int CommandCount = 1;
+
+  private RenderParams _rp;
+  
   
  
   
@@ -63,36 +77,44 @@ public class Dispatcher : MonoBehaviour
   public bool rebuildInEditor = false;
 
 
-  private Vector4[] grassDebug;
+ // private Vector4[] grassDebug;
   //----------------------------------------------------------------------------------------
 
   private void OnEnable()
   {
+    
+
+    
+    
+
     DispatchTerrainCompute();
-    DispatchGrassCompute();
+    SetGrassArgs();
     GenerateTerrain();
     
-    Vector4[] debugGrassPositions =  new Vector4[_grassPositionsBufferDraw.count];
+    /* Vector4[] debugGrassPositions =  new Vector4[_grassPositionsBufferDraw.count];
     _grassPositionsBufferDraw.GetData(debugGrassPositions);
     
     for (int i = 0; i < 1000; i++)
     {
       Debug.Log(debugGrassPositions[i].w);
     }
-   
+   */
     
   }
 
   private void OnDisable()
   {
-    ClearGrassCompute();
+   // ClearGrassCompute();
     ClearTerrainCompute();
   }
 
   private void Start()
   {
+    
     lastDisplacement = displacementStrength;
-    bounds = new Bounds(Vector3.zero, new Vector3(_grassResolution, _grassResolution, _grassResolution));
+   // bounds = new Bounds(Vector3.zero, new Vector3(_grassResolution, _grassResolution, _grassResolution)*100);
+   
+
   }
 
   private void Update()
@@ -101,15 +123,23 @@ public class Dispatcher : MonoBehaviour
     {
       lastDisplacement = displacementStrength;
       DispatchTerrainCompute();
-      DispatchGrassCompute();
+      //DispatchGrassCompute();
       GenerateTerrain();
       
     }
-    grassMaterial.SetFloat("_Rotation", rotation);
+    DrawGrass();
+    
+    
+    
+    
+    
+    
+    
 
-    int instanceCount = _grassPositionsBufferDraw.count * 3;
-            
-    Graphics.DrawMeshInstancedProcedural(grassMesh,0,grassMaterial,bounds, instanceCount);
+   // int instanceCount = _grassPositionsBufferDraw.count * 3;
+   // Graphics.DrawMeshInstancedProcedural(grassMesh,0,grassMaterial,bounds, instanceCount);
+    
+   
   }
 
 
@@ -145,28 +175,83 @@ public class Dispatcher : MonoBehaviour
     _meshBuffer.Release();
     _triangleBuffer.Release();
   }
-  
-  private void DispatchGrassCompute()
+
+  private void SetGrassArgs()
   {
-    _grassPositionsBufferDraw = new ComputeBuffer(_grassResolution * _grassResolution, sizeof(float) * 4);
+    int maxInstanceCount = _grassResolution * _grassResolution * 3 ;
+    int stride = sizeof(float) * 4;
     
-    grassCompute.SetBuffer(0, "GrassPositionsBufferCompute", _grassPositionsBufferDraw);
-    grassCompute.SetInt("_resolution", _grassResolution);
+    _instanceBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, maxInstanceCount, stride);
+    _argsBuffer = new GraphicsBuffer(GraphicsBuffer.Target.IndirectArguments, CommandCount, GraphicsBuffer.IndirectDrawIndexedArgs.size);
+    _argsData = new GraphicsBuffer.IndirectDrawIndexedArgs[CommandCount];
+    
+    _argsData[0].indexCountPerInstance = grassMesh.GetIndexCount(0);
+    _argsData[0].startIndex = grassMesh.GetIndexStart(0);
+    _argsData[0].baseVertexIndex = grassMesh.GetBaseVertex(0);
+    
+    _argsBuffer.SetData(_argsData);
+    
+    _rp = new RenderParams(grassMaterial);
+    _rp.matProps = new MaterialPropertyBlock();
+    _rp.worldBounds =  new Bounds(Vector3.zero, Vector3.one * 10000f);
+    
+    
+  }
+
+
+
+  private void DrawGrass()
+  {
+    grassCompute.SetBuffer(0, "_VisibleGrassInstancesBuffer", _instanceBuffer);
+    grassCompute.SetBuffer(0,"_ArgsBuffer", _argsBuffer);
+    grassCompute.SetBuffer(1,"_ArgsBuffer", _argsBuffer);
+    
+    Plane[] planes = GeometryUtility.CalculateFrustumPlanes(_mainCamera);
+    
+    
+    
+    grassCompute.SetInt("_resolution",_grassResolution);
+    grassCompute.SetInt("_worldArea",_gridSize);
+    
+    
     
     grassCompute.SetTexture(0,"_heightMapTex", heightMapTexture);
     grassCompute.SetFloat("_displacementStrength",displacementStrength);
-
-    int worldArea = _gridSize;
-    grassCompute.SetInt("_worldArea", worldArea);
+    
+    //uint[] resetArgs = new uint[5];
+    //_argsBuffer.GetData(resetArgs);
+    //resetArgs[1] = 0; 
+    //_argsBuffer.SetData(resetArgs);
     
     int numGroups = Mathf.CeilToInt((float)_grassResolution / (8));
     
-    grassCompute.Dispatch(0,numGroups, numGroups, 1);
+    grassCompute.Dispatch(1, numGroups, numGroups, 1);
+    grassCompute.Dispatch(0, numGroups, numGroups, 1);
     
-    grassMaterial.SetBuffer("GrassPositionsBufferShader", _grassPositionsBufferDraw);
-    
-   
+    _rp.matProps.SetFloat("_Rotation", rotation);
+    _rp.matProps.SetBuffer("GrassPositionsBufferShader", _instanceBuffer );
+    Graphics.RenderMeshIndirect(_rp, grassMesh, _argsBuffer , CommandCount);
   }
+
+
+
+
+  /*
+  private void DispatchGrassCompute()
+  {
+    _grassPositionsBufferDraw = new ComputeBuffer(_grassResolution * _grassResolution, sizeof(float) * 4);
+
+
+
+    
+
+    grassCompute.Dispatch(0,numGroups, numGroups, 1);
+
+    grassMaterial.SetBuffer("GrassPositionsBufferShader", _grassPositionsBufferDraw);
+
+
+  }
+  */
 
   private void ClearTerrainCompute()
   {

@@ -1,10 +1,12 @@
 #pragma kernel generatePoints
+#pragma kernel resetInstanceCount
 
 #include "noiseSimplex.cginc"
 
 
-RWStructuredBuffer<float4> GrassPositionsBufferCompute;
+RWStructuredBuffer<float4> _VisibleGrassInstancesBuffer;
 
+RWStructuredBuffer<uint> _ArgsBuffer;
 int _resolution;
 int _worldArea;
 
@@ -42,7 +44,13 @@ void generatePoints (uint3 id : SV_DispatchThreadID)
         
 
 
-        
-        GrassPositionsBufferCompute[id.x + id.y * _resolution] = pos;
+        InterlockedAdd(_ArgsBuffer[1],uint(3));
+        _VisibleGrassInstancesBuffer[id.x + id.y * _resolution] = pos;
     }
+}
+
+[numthreads(1,1,1)]
+void resetInstanceCount (uint3 id : SV_DispatchThreadID)
+{
+    _ArgsBuffer[1] = 0;
 }
