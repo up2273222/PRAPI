@@ -1,21 +1,40 @@
-#pragma kernel generatePoints
+#pragma kernel GenerateAllInstances
+#pragma kernel CullInvisibleInstances
 #pragma kernel resetInstanceCount
 
+
 #include "noiseSimplex.cginc"
+
+struct FrustumPlane {
+    float3 normal;
+    float distance;
+};
 
 
 RWStructuredBuffer<float4> _VisibleGrassInstancesBuffer;
 
 RWStructuredBuffer<uint> _ArgsBuffer;
+
+RWStructuredBuffer<FrustumPlane> _FrustumPlanesBuffer;
+
+RWStructuredBuffer<float4> _AllInstancesBuffer;
+
 int _resolution;
 int _worldArea;
+
+
+
+
+
 
 Texture2D<float4> _heightMapTex;
 SamplerState sampler_heightMapTex;
 float _displacementStrength;
 
+
+
 [numthreads(8,8,1)]
-void generatePoints (uint3 id : SV_DispatchThreadID)
+void GenerateAllInstances (uint3 id : SV_DispatchThreadID)
 {
     if (id.x <uint(_resolution) && id.y < uint(_resolution))
     {
@@ -40,13 +59,35 @@ void generatePoints (uint3 id : SV_DispatchThreadID)
         pos.x += noiseValue;
         pos.z += noiseValue;
 
-       
+        _AllInstancesBuffer[id.x + id.y * _resolution] = pos;
         
 
-
-        InterlockedAdd(_ArgsBuffer[1],uint(3));
-        _VisibleGrassInstancesBuffer[id.x + id.y * _resolution] = pos;
+        
     }
+}
+
+[numthreads(8,8,1)]
+void CullInvisibleInstances (uint3 id : SV_DispatchThreadID)
+{
+   
+    float4 pos = _AllInstancesBuffer[id.x + id.y * _resolution];
+    for (int i = 0; i < 6; i++)
+    {
+        float ndotplusd = (dot(pos.xyz,_FrustumPlanesBuffer[i].normal ) + _FrustumPlanesBuffer[i].distance);
+        if (ndotplusd < 0.0f)
+        {
+            return;
+        }
+    }
+    
+
+    uint writeIndex;
+    InterlockedAdd(_ArgsBuffer[1],uint(3),writeIndex);
+    uint instanceIndex = writeIndex/3;
+    _VisibleGrassInstancesBuffer[instanceIndex] = pos;
+    
+
+    
 }
 
 [numthreads(1,1,1)]

@@ -101,6 +101,8 @@ Shader "Custom/GrassShader"
 
                 col = lerp(col,_OldGrassColour,GrassPositionsBufferShader[grassIndex].w);
 
+                //fix this shit lighting calculation is done too early lol---------------------------------------------------------------
+
                 
                 return col * ndotl;
                 //return float4(i.uv,0,1);

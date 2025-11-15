@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
+
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 
 public class Dispatcher : MonoBehaviour
@@ -56,13 +58,17 @@ public class Dispatcher : MonoBehaviour
 
 
 
-  private GraphicsBuffer _instanceBuffer;
+  private GraphicsBuffer _visibleInstanceBuffer;
+  private GraphicsBuffer _allInstanceBuffer;
   private GraphicsBuffer _argsBuffer;
   private GraphicsBuffer.IndirectDrawIndexedArgs[] _argsData;
+  private GraphicsBuffer _frustumBuffer;
   
   private const int CommandCount = 1;
 
   private RenderParams _rp;
+  
+
   
   
  
@@ -73,8 +79,12 @@ public class Dispatcher : MonoBehaviour
   //Debug
   //----------------------------------------------------------------------------------------
   private float lastDisplacement;
+  private float lastDensity;
 
   public bool rebuildInEditor = false;
+
+  private float framerate;
+  public Text frameCounter;
 
 
  // private Vector4[] grassDebug;
@@ -104,7 +114,7 @@ public class Dispatcher : MonoBehaviour
 
   private void OnDisable()
   {
-   // ClearGrassCompute();
+    ClearGrassCompute();
     ClearTerrainCompute();
   }
 
@@ -112,6 +122,7 @@ public class Dispatcher : MonoBehaviour
   {
     
     lastDisplacement = displacementStrength;
+    lastDensity = _grassResolution;
    // bounds = new Bounds(Vector3.zero, new Vector3(_grassResolution, _grassResolution, _grassResolution)*100);
    
 
@@ -119,15 +130,20 @@ public class Dispatcher : MonoBehaviour
 
   private void Update()
   {
-    if (!Mathf.Approximately(displacementStrength, lastDisplacement) && rebuildInEditor)
+    //if (!Mathf.Approximately(displacementStrength, lastDisplacement) && rebuildInEditor)
+    
+    if (!Mathf.Approximately(lastDensity, _grassResolution))
     {
       lastDisplacement = displacementStrength;
+      lastDensity = _grassResolution;
       DispatchTerrainCompute();
-      //DispatchGrassCompute();
+      SetGrassArgs();
       GenerateTerrain();
       
     }
     DrawGrass();
+    framerate = 1.0f / Time.deltaTime;
+    frameCounter.text = string.Format("FPS: {0}", framerate);
     
     
     
@@ -179,11 +195,15 @@ public class Dispatcher : MonoBehaviour
   private void SetGrassArgs()
   {
     int maxInstanceCount = _grassResolution * _grassResolution * 3 ;
-    int stride = sizeof(float) * 4;
+    int instanceStride = sizeof(float) * 4;
+    int frustumStride = sizeof(float) * 4;
     
-    _instanceBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, maxInstanceCount, stride);
+    _allInstanceBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, maxInstanceCount, instanceStride);
+    _visibleInstanceBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, maxInstanceCount, instanceStride);
+    
     _argsBuffer = new GraphicsBuffer(GraphicsBuffer.Target.IndirectArguments, CommandCount, GraphicsBuffer.IndirectDrawIndexedArgs.size);
     _argsData = new GraphicsBuffer.IndirectDrawIndexedArgs[CommandCount];
+    _frustumBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, 6, frustumStride);
     
     _argsData[0].indexCountPerInstance = grassMesh.GetIndexCount(0);
     _argsData[0].startIndex = grassMesh.GetIndexStart(0);
@@ -195,6 +215,19 @@ public class Dispatcher : MonoBehaviour
     _rp.matProps = new MaterialPropertyBlock();
     _rp.worldBounds =  new Bounds(Vector3.zero, Vector3.one * 10000f);
     
+    grassCompute.SetTexture(0,"_heightMapTex", heightMapTexture);
+    grassCompute.SetInt("_resolution",_grassResolution);
+    grassCompute.SetInt("_worldArea",_gridSize);
+    grassCompute.SetFloat("_displacementStrength",displacementStrength);
+    
+    grassCompute.SetBuffer(0, "_AllInstancesBuffer", _allInstanceBuffer);
+    
+    int numGroups = Mathf.CeilToInt((float)_grassResolution / (8));
+    
+    grassCompute.Dispatch(0,numGroups, numGroups, 1);
+    
+    grassCompute.SetBuffer(1, "_AllInstancesBuffer", _allInstanceBuffer);
+    
     
   }
 
@@ -202,56 +235,28 @@ public class Dispatcher : MonoBehaviour
 
   private void DrawGrass()
   {
-    grassCompute.SetBuffer(0, "_VisibleGrassInstancesBuffer", _instanceBuffer);
-    grassCompute.SetBuffer(0,"_ArgsBuffer", _argsBuffer);
+    grassCompute.SetBuffer(1, "_VisibleGrassInstancesBuffer", _visibleInstanceBuffer);
     grassCompute.SetBuffer(1,"_ArgsBuffer", _argsBuffer);
+    grassCompute.SetBuffer(2,"_ArgsBuffer", _argsBuffer);
     
-    Plane[] planes = GeometryUtility.CalculateFrustumPlanes(_mainCamera);
+    _frustumBuffer.SetData(GeometryUtility.CalculateFrustumPlanes(_mainCamera));
+    grassCompute.SetBuffer(1, "_FrustumPlanesBuffer", _frustumBuffer);
     
-    
-    
-    grassCompute.SetInt("_resolution",_grassResolution);
-    grassCompute.SetInt("_worldArea",_gridSize);
-    
-    
-    
-    grassCompute.SetTexture(0,"_heightMapTex", heightMapTexture);
     grassCompute.SetFloat("_displacementStrength",displacementStrength);
-    
-    //uint[] resetArgs = new uint[5];
-    //_argsBuffer.GetData(resetArgs);
-    //resetArgs[1] = 0; 
-    //_argsBuffer.SetData(resetArgs);
     
     int numGroups = Mathf.CeilToInt((float)_grassResolution / (8));
     
+    
+    //Reset counter, Cull invisible 
+    grassCompute.Dispatch(2, numGroups, numGroups, 1);
     grassCompute.Dispatch(1, numGroups, numGroups, 1);
-    grassCompute.Dispatch(0, numGroups, numGroups, 1);
     
     _rp.matProps.SetFloat("_Rotation", rotation);
-    _rp.matProps.SetBuffer("GrassPositionsBufferShader", _instanceBuffer );
+    _rp.matProps.SetBuffer("GrassPositionsBufferShader", _visibleInstanceBuffer );
     Graphics.RenderMeshIndirect(_rp, grassMesh, _argsBuffer , CommandCount);
   }
 
 
-
-
-  /*
-  private void DispatchGrassCompute()
-  {
-    _grassPositionsBufferDraw = new ComputeBuffer(_grassResolution * _grassResolution, sizeof(float) * 4);
-
-
-
-    
-
-    grassCompute.Dispatch(0,numGroups, numGroups, 1);
-
-    grassMaterial.SetBuffer("GrassPositionsBufferShader", _grassPositionsBufferDraw);
-
-
-  }
-  */
 
   private void ClearTerrainCompute()
   {
@@ -267,9 +272,16 @@ public class Dispatcher : MonoBehaviour
   
   private void ClearGrassCompute()
   {
-    _grassPositionsBufferDraw.Release();
+    _allInstanceBuffer.Release();
+    _visibleInstanceBuffer.Release();
+    _argsBuffer.Release();
+    _frustumBuffer.Release();
     
-    _grassPositionsBufferDraw = null;
+    _argsBuffer = null;
+    _frustumBuffer = null;
+    _allInstanceBuffer = null;
+    _visibleInstanceBuffer = null;
+   
   }
 
   private void GenerateTerrain()
