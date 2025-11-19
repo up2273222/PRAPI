@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Zanaptak.PcgRandom</id>
+    <version>1.0.0</version>
+    <authors>zanaptak</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>https://github.com/zanaptak/PcgRandom</projectUrl>
+    <description>A PCG pseudorandom number generator implementation for .NET and Fable. PCG (https://www.pcg-random.org/) is a family of simple fast space-efficient statistically good algorithms for random number generation.</description>
+    <releaseNotes>https://github.com/zanaptak/PcgRandom/blob/main/CHANGELOG.md#100-2021-08-12</releaseNotes>
+    <tags>pcg random rng prng .net fable</tags>
+    <repository type="git" url="https://github.com/zanaptak/PcgRandom.git" commit="08fabd4471f7e4d1ea108a74f1fdf2d5ef5fda0f" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.5.2">
+        <dependency id="FSharp.Core" version="4.3.4" exclude="Build,Analyzers" />
+        <dependency id="Zanaptak.BufferedCryptoRandom" version="1.0.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="FSharp.Core" version="4.3.4" exclude="Build,Analyzers" />
+        <dependency id="Zanaptak.BufferedCryptoRandom" version="1.0.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Zanaptak.BufferedCryptoRandom</id>
+    <version>1.0.1</version>
+    <authors>zanaptak</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>https://github.com/zanaptak/BufferedCryptoRandom</projectUrl>
+    <description>A buffered and thread-safe wrapper around the cryptographic random number generator for .NET and Fable. Compatible with the System.Random interface, plus additional convenience methods.</description>
+    <releaseNotes>https://github.com/zanaptak/BufferedCryptoRandom/blob/main/CHANGELOG.md#101-2021-08-11</releaseNotes>
+    <tags>random rng .net</tags>
+    <repository type="git" url="https://github.com/zanaptak/BufferedCryptoRandom.git" commit="f40deb6b209406e5ac4a86a168c46d95e0f1f9fa" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.5.2">
+        <dependency id="FSharp.Core" version="4.3.4" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="FSharp.Core" version="4.3.4" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

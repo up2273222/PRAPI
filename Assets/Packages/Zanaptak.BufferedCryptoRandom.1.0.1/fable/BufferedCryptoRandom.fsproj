@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <DisableImplicitSystemValueTupleReference>true</DisableImplicitSystemValueTupleReference>
+    <VersionPrefix>1.0.1</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <Authors>zanaptak</Authors>
+    <AssemblyName>Zanaptak.BufferedCryptoRandom</AssemblyName>
+    <Product>Zanaptak.BufferedCryptoRandom</Product>
+    <PackageId>Zanaptak.BufferedCryptoRandom</PackageId>
+    <PackageProjectUrl>https://github.com/zanaptak/BufferedCryptoRandom</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/zanaptak/BufferedCryptoRandom/blob/main/CHANGELOG.md#101-2021-08-11</PackageReleaseNotes>
+    <PackageTags>random;rng;.net</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description>A buffered and thread-safe wrapper around the cryptographic random number generator for .NET and Fable. Compatible with the System.Random interface, plus additional convenience methods.</Description>
+    <Configurations>Debug;Release;Fable</Configurations>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Fable'">
+    <DefineConstants>FABLE_COMPILER</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="BufferedCryptoRandom.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.3.4" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>

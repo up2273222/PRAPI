@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>Zanaptak.BufferedCryptoRandom</name></assembly>
+<members>
+<member name="P:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.IsThreadSafe">
+<summary>
+ Indicates whether this instance uses exclusive locking when accessing the internal buffer for thread safety.
+</summary>
+</member>
+<member name="P:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.IsCrypto">
+<summary>
+ Indicates whether this instance is using the cryptographic provider. Always true in .NET. In Fable, depends on environment and the fableAllowNonCrypto option.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextUInt8(System.Byte,System.Byte)">
+<summary>
+ Returns a random 8-bit unsigned integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextUInt8(System.Byte)">
+<summary>
+ Returns a random 8-bit unsigned integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextUInt8">
+<summary>
+ Returns a random 8-bit unsigned integer greater than or equal to 0 and less than or equal to Byte.MaxValue.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextUInt64(System.UInt64,System.UInt64)">
+<summary>
+ Returns a random 64-bit unsigned integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextUInt64(System.UInt64)">
+<summary>
+ Returns a random 64-bit unsigned integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextUInt64">
+<summary>
+ Returns a random 64-bit unsigned integer greater than or equal to 0 and less than or equal to UInt64.MaxValue.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextUInt32(System.UInt32,System.UInt32)">
+<summary>
+ Returns a random 32-bit unsigned integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextUInt32(System.UInt32)">
+<summary>
+ Returns a random 32-bit unsigned integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextUInt32">
+<summary>
+ Returns a random 32-bit unsigned integer greater than or equal to 0 and less than or equal to UInt32.MaxValue.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextUInt16(System.UInt16,System.UInt16)">
+<summary>
+ Returns a random 16-bit unsigned integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextUInt16(System.UInt16)">
+<summary>
+ Returns a random 16-bit unsigned integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextUInt16">
+<summary>
+ Returns a random 16-bit unsigned integer greater than or equal to 0 and less than or equal to UInt16.MaxValue.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextInt8(System.SByte,System.SByte)">
+<summary>
+ Returns a random 8-bit signed integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextInt8(System.SByte)">
+<summary>
+ Returns a random 8-bit signed integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextInt8">
+<summary>
+ Returns a random 8-bit signed integer greater than or equal to 0 and less than or equal to SByte.MaxValue.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextInt64(System.Int64,System.Int64)">
+<summary>
+ Returns a random 64-bit signed integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextInt64(System.Int64)">
+<summary>
+ Returns a random 64-bit signed integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextInt64">
+<summary>
+ Returns a random 64-bit signed integer greater than or equal to 0 and less than or equal to Int64.MaxValue.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextInt32(System.Int32,System.Int32)">
+<summary>
+ Returns a random 32-bit signed integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextInt32(System.Int32)">
+<summary>
+ Returns a random 32-bit signed integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextInt32">
+<summary>
+ Returns a random 32-bit signed integer greater than or equal to 0 and less than or equal to Int32.MaxValue.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextInt16(System.Int16,System.Int16)">
+<summary>
+ Returns a random 16-bit signed integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextInt16(System.Int16)">
+<summary>
+ Returns a random 16-bit signed integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextInt16">
+<summary>
+ Returns a random 16-bit signed integer greater than or equal to 0 and less than or equal to Int16.MaxValue.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextDouble">
+<summary>
+ Returns a random double greater than or equal to 0.0 and less than 1.0 (using 53 random bits).
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextBytes(System.Byte[],System.Int32,System.Int32)">
+<summary>
+ Sets the specified bytes in the specified array to random bytes.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextBytes(System.Byte[])">
+<summary>
+ Sets all bytes in the specified array to random bytes.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.NextBoolean">
+<summary>
+ Returns a random boolean.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.Next(System.Int32,System.Int32)">
+<summary>
+ Returns a random 32-bit signed integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.Next(System.Int32)">
+<summary>
+ Returns a random 32-bit signed integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.Next">
+<summary>
+ Returns a random 32-bit signed integer greater than or equal to 0 and less than Int32.MaxValue.
+</summary>
+</member>
+<member name="M:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom.#ctor(System.Int32,System.Boolean,System.Boolean)">
+ <summary>Creates a BufferedCryptoRandom instance, optionally configured using the specified parameters.</summary>
+ <param name='bufferByteCount'>Buffer size in bytes (min 16, max 65536). Default: 1024</param>
+ <param name='threadSafe'>Enable exclusive locking when accessing the internal buffer for thread safety. Default: true</param>
+ <param name='fableAllowNonCrypto'>In Fable app, if environment doesn't support crypto RNG, allow fallback to non-crypto RNG. Default: false (throws exception when no crypto support)</param>
+</member>
+<member name="T:Zanaptak.BufferedCryptoRandom.BufferedCryptoRandom">
+<summary>
+ A buffered and thread-safe wrapper around the cryptographic random number generator for .NET and Fable.
+</summary>
+</member>
+</members>
+</doc>

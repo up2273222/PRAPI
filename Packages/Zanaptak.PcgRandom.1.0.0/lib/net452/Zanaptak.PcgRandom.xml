@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>Zanaptak.PcgRandom</name></assembly>
+<members>
+<member name="M:Zanaptak.PcgRandom.Pcg8.ToString">
+<summary>
+ Returns name of PCG algorithm for this instance.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.NextDouble">
+<summary>
+ Returns a random double greater than or equal to 0.0 and less than 1.0 (using 53 random bits). Consumes 7 values from the generator.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.NextBytes(System.Byte[],System.Int32,System.Int32)">
+<summary>
+ Sets the specified bytes in the specified array to random bytes. Consumes multiple values from the generator if necessary.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.NextBytes(System.Byte[])">
+<summary>
+ Sets all bytes in the specified array to random bytes. Consumes multiple values from the generator if necessary.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.NextBoolean">
+<summary>
+ Returns a random boolean.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.Next">
+<summary>
+ Returns a random 8-bit unsigned integer.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.Next(System.Byte)">
+<summary>
+ Returns a random 8-bit unsigned integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.Next(System.Byte,System.Byte)">
+<summary>
+ Returns a random 8-bit unsigned integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.#ctor">
+<summary>
+ Use default variant (Normal.XSH_RR) with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.#ctor(System.UInt16)">
+<summary>
+ Use default variant (Normal.XSH_RR) with specified seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.#ctor(System.UInt16,System.UInt16)">
+<summary>
+ Use default variant (Normal.XSH_RR) with specified seed and stream.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.#ctor(Zanaptak.PcgRandom.Pcg8Variants.Invertible)">
+<summary>
+ Select Invertible variant with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.#ctor(Zanaptak.PcgRandom.Pcg8Variants.Invertible,System.Byte)">
+<summary>
+ Select Invertible variant with specified seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.#ctor(Zanaptak.PcgRandom.Pcg8Variants.Invertible,System.Byte,System.Byte)">
+<summary>
+ Select Invertible variant with specified seed and stream.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.#ctor(Zanaptak.PcgRandom.Pcg8Variants.Normal)">
+<summary>
+ Select Normal variant with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.#ctor(Zanaptak.PcgRandom.Pcg8Variants.Normal,System.UInt16)">
+<summary>
+ Select Normal variant with specified seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.#ctor(Zanaptak.PcgRandom.Pcg8Variants.Normal,System.UInt16,System.UInt16)">
+<summary>
+ Select Normal variant with specified seed and stream.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.#ctor(Zanaptak.PcgRandom.Pcg8Variants.Fast)">
+<summary>
+ Select Fast variant with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg8.#ctor(Zanaptak.PcgRandom.Pcg8Variants.Fast,System.UInt16)">
+<summary>
+ Select Fast variant with specified seed.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg8">
+<summary>
+ PCG 8-bit pseudorandom number generator.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.ToString">
+<summary>
+ Returns name of PCG algorithm for this instance.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.NextDouble">
+<summary>
+ Returns a random double greater than or equal to 0.0 and less than 1.0 (using 53 random bits). Consumes 4 values from the generator.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.NextBytes(System.Byte[],System.Int32,System.Int32)">
+<summary>
+ Sets the specified bytes in the specified array to random bytes. Consumes multiple values from the generator if necessary.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.NextBytes(System.Byte[])">
+<summary>
+ Sets all bytes in the specified array to random bytes. Consumes multiple values from the generator if necessary.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.NextBoolean">
+<summary>
+ Returns a random boolean.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.Next">
+<summary>
+ Returns a random 16-bit unsigned integer.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.Next(System.UInt16)">
+<summary>
+ Returns a random 16-bit unsigned integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.Next(System.UInt16,System.UInt16)">
+<summary>
+ Returns a random 16-bit unsigned integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.#ctor">
+<summary>
+ Use default variant (Normal.XSH_RR) with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.#ctor(System.UInt32)">
+<summary>
+ Use default variant (Normal.XSH_RR) with specified seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.#ctor(System.UInt32,System.UInt32)">
+<summary>
+ Use default variant (Normal.XSH_RR) with specified seed and stream.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.#ctor(Zanaptak.PcgRandom.Pcg16Variants.Invertible)">
+<summary>
+ Select Invertible variant with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.#ctor(Zanaptak.PcgRandom.Pcg16Variants.Invertible,System.UInt16)">
+<summary>
+ Select Invertible variant with specified seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.#ctor(Zanaptak.PcgRandom.Pcg16Variants.Invertible,System.UInt16,System.UInt16)">
+<summary>
+ Select Invertible variant with specified seed and stream.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.#ctor(Zanaptak.PcgRandom.Pcg16Variants.Normal)">
+<summary>
+ Select Normal variant with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.#ctor(Zanaptak.PcgRandom.Pcg16Variants.Normal,System.UInt32)">
+<summary>
+ Select Normal variant with specified seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.#ctor(Zanaptak.PcgRandom.Pcg16Variants.Normal,System.UInt32,System.UInt32)">
+<summary>
+ Select Normal variant with specified seed and stream.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.#ctor(Zanaptak.PcgRandom.Pcg16Variants.Fast)">
+<summary>
+ Select Fast variant with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg16.#ctor(Zanaptak.PcgRandom.Pcg16Variants.Fast,System.UInt32)">
+<summary>
+ Select Fast variant with specified seed.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg16">
+<summary>
+ PCG 16-bit pseudorandom number generator.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.ToString">
+<summary>
+ Returns name of PCG algorithm for this instance.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.NextDouble">
+<summary>
+ Returns a random double greater than or equal to 0.0 and less than 1.0 (using 53 random bits). Consumes 2 values from the generator.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.NextBytes(System.Byte[],System.Int32,System.Int32)">
+<summary>
+ Sets the specified bytes in the specified array to random bytes. Consumes multiple values from the generator if necessary.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.NextBytes(System.Byte[])">
+<summary>
+ Sets all bytes in the specified array to random bytes. Consumes multiple values from the generator if necessary.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.NextBoolean">
+<summary>
+ Returns a random boolean.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.Next">
+<summary>
+ Returns a random 32-bit unsigned integer.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.Next(System.UInt32)">
+<summary>
+ Returns a random 32-bit unsigned integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.Next(System.UInt32,System.UInt32)">
+<summary>
+ Returns a random 32-bit unsigned integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.#ctor">
+<summary>
+ Use default variant (Normal.XSH_RR) with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.#ctor(System.UInt64)">
+<summary>
+ Use default variant (Normal.XSH_RR) with specified seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.#ctor(System.UInt64,System.UInt64)">
+<summary>
+ Use default variant (Normal.XSH_RR) with specified seed and stream.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.#ctor(Zanaptak.PcgRandom.Pcg32Variants.Invertible)">
+<summary>
+ Select Invertible variant with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.#ctor(Zanaptak.PcgRandom.Pcg32Variants.Invertible,System.UInt32)">
+<summary>
+ Select Invertible variant with specified seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.#ctor(Zanaptak.PcgRandom.Pcg32Variants.Invertible,System.UInt32,System.UInt32)">
+<summary>
+ Select Invertible variant with specified seed and stream.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.#ctor(Zanaptak.PcgRandom.Pcg32Variants.Normal)">
+<summary>
+ Select Normal variant with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.#ctor(Zanaptak.PcgRandom.Pcg32Variants.Normal,System.UInt64)">
+<summary>
+ Select Normal variant with specified seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.#ctor(Zanaptak.PcgRandom.Pcg32Variants.Normal,System.UInt64,System.UInt64)">
+<summary>
+ Select Normal variant with specified seed and stream.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.#ctor(Zanaptak.PcgRandom.Pcg32Variants.Fast)">
+<summary>
+ Select Fast variant with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg32.#ctor(Zanaptak.PcgRandom.Pcg32Variants.Fast,System.UInt64)">
+<summary>
+ Select Fast variant with specified seed.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg32">
+<summary>
+ PCG 32-bit pseudorandom number generator.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.ToString">
+<summary>
+ Returns name of PCG algorithm for this instance.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.NextDouble">
+<summary>
+ Returns a random double greater than or equal to 0.0 and less than 1.0 (using 53 random bits).
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.NextBytes(System.Byte[],System.Int32,System.Int32)">
+<summary>
+ Sets the specified bytes in the specified array to random bytes. Consumes multiple values from the generator if necessary.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.NextBytes(System.Byte[])">
+<summary>
+ Sets all bytes in the specified array to random bytes. Consumes multiple values from the generator if necessary.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.NextBoolean">
+<summary>
+ Returns a random boolean.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.Next">
+<summary>
+ Returns a random 64-bit unsigned integer.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.Next(System.UInt64)">
+<summary>
+ Returns a random 64-bit unsigned integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.Next(System.UInt64,System.UInt64)">
+<summary>
+ Returns a random 64-bit unsigned integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.#ctor">
+<summary>
+ Use default variant (Normal.XSL_RR) with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.#ctor(System.Numerics.BigInteger)">
+<summary>
+ Use default variant (Normal.XSL_RR) with specified seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.#ctor(System.Numerics.BigInteger,System.Numerics.BigInteger)">
+<summary>
+ Use default variant (Normal.XSL_RR) with specified seed and stream.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.#ctor(Zanaptak.PcgRandom.Pcg64Variants.Invertible)">
+<summary>
+ Select Invertible variant with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.#ctor(Zanaptak.PcgRandom.Pcg64Variants.Invertible,System.UInt64)">
+<summary>
+ Select Invertible variant with specified seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.#ctor(Zanaptak.PcgRandom.Pcg64Variants.Invertible,System.UInt64,System.UInt64)">
+<summary>
+ Select Invertible variant with specified seed and stream.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.#ctor(Zanaptak.PcgRandom.Pcg64Variants.Normal)">
+<summary>
+ Select Normal variant with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.#ctor(Zanaptak.PcgRandom.Pcg64Variants.Normal,System.Numerics.BigInteger)">
+<summary>
+ Select Normal variant with specified seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.#ctor(Zanaptak.PcgRandom.Pcg64Variants.Normal,System.Numerics.BigInteger,System.Numerics.BigInteger)">
+<summary>
+ Select Normal variant with specified seed and stream.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.#ctor(Zanaptak.PcgRandom.Pcg64Variants.Fast)">
+<summary>
+ Select Fast variant with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg64.#ctor(Zanaptak.PcgRandom.Pcg64Variants.Fast,System.Numerics.BigInteger)">
+<summary>
+ Select Fast variant with specified seed.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg64">
+<summary>
+ PCG 64-bit pseudorandom number generator.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg128.ToString">
+<summary>
+ Returns name of PCG algorithm for this instance.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg128.NextDouble">
+<summary>
+ Returns a random double greater than or equal to 0.0 and less than 1.0 (using 53 random bits).
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg128.NextBytes(System.Byte[],System.Int32,System.Int32)">
+<summary>
+ Sets the specified bytes in the specified array to random bytes. Consumes multiple values from the generator if necessary.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg128.NextBytes(System.Byte[])">
+<summary>
+ Sets all bytes in the specified array to random bytes. Consumes multiple values from the generator if necessary.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg128.NextBoolean">
+<summary>
+ Returns a random boolean.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg128.Next">
+<summary>
+ Returns a random 128-bit unsigned integer.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg128.Next(System.Numerics.BigInteger)">
+<summary>
+ Returns a random 128-bit unsigned integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg128.Next(System.Numerics.BigInteger,System.Numerics.BigInteger)">
+<summary>
+ Returns a random 128-bit unsigned integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg128.#ctor(Zanaptak.PcgRandom.Pcg128Variants.Invertible)">
+<summary>
+ Select Invertible variant with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg128.#ctor(Zanaptak.PcgRandom.Pcg128Variants.Invertible,System.Numerics.BigInteger)">
+<summary>
+ Select Invertible variant with specified seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg128.#ctor(Zanaptak.PcgRandom.Pcg128Variants.Invertible,System.Numerics.BigInteger,System.Numerics.BigInteger)">
+<summary>
+ Select Invertible variant with specified seed and stream.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg128">
+<summary>
+ PCG 128-bit pseudorandom number generator.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg.NextDouble">
+<summary>
+ Returns a random double greater than or equal to 0.0 and less than 1.0 (using 53 random bits). Consumes 2 values from the generator.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg.NextBytes(System.Byte[],System.Int32,System.Int32)">
+<summary>
+ Sets the specified bytes in the specified array to random bytes. Consumes multiple values from the generator if necessary.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg.NextBytes(System.Byte[])">
+<summary>
+ Sets all bytes in the specified array to random bytes. Consumes multiple values from the generator if necessary.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg.NextBoolean">
+<summary>
+ Returns a random boolean.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg.Next(System.Int32,System.Int32)">
+<summary>
+ Returns a random 32-bit signed integer greater than or equal to the specified minimum and less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg.Next(System.Int32)">
+<summary>
+ Returns a random 32-bit signed integer less than the specified maximum.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg.Next">
+<summary>
+ Returns a random 32-bit signed integer greater than or equal to 0 and less than Int32.MaxValue.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg.#ctor">
+<summary>
+ Create Pcg instance with random seed.
+</summary>
+</member>
+<member name="M:Zanaptak.PcgRandom.Pcg.#ctor(System.Int32)">
+<summary>
+ Create Pcg instance with specified seed.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg">
+<summary>
+ PCG-backed pseudorandom number generator compatible with System.Random.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg8Variants.Normal.Default">
+<summary>
+ Default: XSH_RR
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg8Variants.Normal">
+<summary>
+ General purpose variant balancing speed and statistical quality. Allows stream selection. Based on LCG generator type.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg8Variants.Fast.Default">
+<summary>
+ Default: XSH_RR
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg8Variants.Fast">
+<summary>
+ Faster variant but with reduced statistical quality. Based on MCG generator type.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg8Variants.Invertible.Default">
+<summary>
+ Default: RXS_M_XS
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg8Variants.Invertible">
+<summary>
+ Variant with the same number of outbut bits as internal state bits. Easier to reverse-engineer internal state than other variants.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg16Variants.Normal.Default">
+<summary>
+ Default: XSH_RR
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg16Variants.Normal">
+<summary>
+ General purpose variant balancing speed and statistical quality. Allows stream selection. Based on LCG generator type.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg16Variants.Fast.Default">
+<summary>
+ Default: XSH_RR
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg16Variants.Fast">
+<summary>
+ Faster variant but with reduced statistical quality. Based on MCG generator type.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg16Variants.Invertible.Default">
+<summary>
+ Default: RXS_M_XS
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg16Variants.Invertible">
+<summary>
+ Variant with the same number of outbut bits as internal state bits. Easier to reverse-engineer internal state than other variants.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg32Variants.Normal.Default">
+<summary>
+ Default: XSH_RR
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg32Variants.Normal">
+<summary>
+ General purpose variant balancing speed and statistical quality. Allows stream selection. Based on LCG generator type.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg32Variants.Fast.Default">
+<summary>
+ Default: XSH_RR
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg32Variants.Fast">
+<summary>
+ Faster variant but with reduced statistical quality. Based on MCG generator type.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg32Variants.Invertible.Default">
+<summary>
+ Default: RXS_M_XS
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg32Variants.Invertible">
+<summary>
+ Variant with the same number of outbut bits as internal state bits. Easier to reverse-engineer internal state than other variants.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg64Variants.Normal.Default">
+<summary>
+ Default: XSL_RR
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg64Variants.Normal">
+<summary>
+ General purpose variant balancing speed and statistical quality. Allows stream selection. Based on LCG generator type.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg64Variants.Fast.Default">
+<summary>
+ Default: XSL_RR
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg64Variants.Fast">
+<summary>
+ Faster variant but with reduced statistical quality. Based on MCG generator type.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg64Variants.Invertible.Default">
+<summary>
+ Default: RXS_M_XS
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg64Variants.Invertible">
+<summary>
+ Variant with the same number of outbut bits as internal state bits. Easier to reverse-engineer internal state than other variants.
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg128Variants.Invertible.Default">
+<summary>
+ Default: XSL_RR_RR
+</summary>
+</member>
+<member name="T:Zanaptak.PcgRandom.Pcg128Variants.Invertible">
+<summary>
+ Variant with the same number of outbut bits as internal state bits. Easier to reverse-engineer internal state than other variants.
+</summary>
+</member>
+</members>
+</doc>

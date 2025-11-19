@@ -1199,7 +1199,7 @@ MonoBehaviour:
   _mainCamera: {fileID: 330585545}
   heightMapTexture: {fileID: 2800000, guid: 4bb48ab01669f8e4089e22c2cadb5921, type: 3}
   terrainMaterial: {fileID: 2100000, guid: 7463779bb5afc75439fb39f580813530, type: 2}
-  _grassResolution: 1000
+  _grassResolution: 200
   grassMaterial: {fileID: 2100000, guid: 3bd33e09d23a6a44b8ff6af84874ac66, type: 2}
   grassMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   rebuildInEditor: 0
