@@ -21,10 +21,11 @@ Shader "Custom/GrassShader"
             #include "UnityCG.cginc"
             #include "AutoLight.cginc"
             #include "UnityStandardBRDF.cginc"
-            #include "Random.cginc"
+            #include "HashFunction.cginc"
 
             #define UNITY_INDIRECT_DRAW_ARGS IndirectDrawIndexedArgs
             #include "UnityIndirect.cginc"
+           
             
             
 
@@ -70,12 +71,31 @@ Shader "Custom/GrassShader"
             {
                 InitIndirectDrawArgs(0);
                 v2f o;
+                
+                
 
                 uint indirectInstanceID = GetIndirectInstanceID(instanceID);                 
                 o.instanceid = indirectInstanceID;
                   
                 uint grassIndex = o.instanceid / 3;
                 uint quadIndex  = o.instanceid % 3;
+                
+                float hashPos = hash11(GrassPositionsBufferShader[grassIndex].xyz);
+                float cosVal;
+                
+                if (hashPos > 0.7)
+                {
+                     cosVal = cos(_Time.y * 2);
+                }
+                else
+                {
+                     cosVal = cos(_Time.y * (1.5 - GrassPositionsBufferShader[grassIndex].w));
+                }
+                
+                float finalWave = (cosVal * cosVal * 0.65) - hashPos * 0.5;
+                
+                
+                
                 
                 float3 localPosition  = (RotateAroundYAxis(v.vertex,_Rotation * quadIndex));
                 float4 worldPosition = float4(GrassPositionsBufferShader[grassIndex].xyz + localPosition, 1.0f);
@@ -85,7 +105,9 @@ Shader "Custom/GrassShader"
                 worldPosition.y += o.uv.y * (GrassPositionsBufferShader[grassIndex].w);
                 worldPosition.y -= 0.5;
                 
-                worldPosition.x += o.uv.y * sin((v.vertex.y + _Time * 15) / 0.75) * ((0.15 + GrassPositionsBufferShader[grassIndex].w)/50);
+                worldPosition.x += o.uv.y * finalWave * GrassPositionsBufferShader[grassIndex].w * hashPos * 0.8;
+                
+                worldPosition.z += o.uv.y * finalWave * GrassPositionsBufferShader[grassIndex].w * hashPos * 0.4;
                 
                
 
@@ -105,8 +127,11 @@ Shader "Custom/GrassShader"
                 float3 lightDir = _WorldSpaceLightPos0.xyz;
 
                 uint grassIndex = i.instanceid / 3;
-
-                col = lerp(col,_OldGrassColour,GrassPositionsBufferShader[grassIndex].w);
+                
+                float4 agedCol = lerp(col,_OldGrassColour,GrassPositionsBufferShader[grassIndex].w);
+                col = lerp(col,agedCol,i.uv.y);
+                
+                
 
                 
                 float ndotl = DotClamped(lightDir, normalize(float3(0, 1, 0)));

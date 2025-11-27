@@ -119,7 +119,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _OldGrass: {r: 0, g: 1, b: 0, a: 1}
-    - _OldGrassColour: {r: 1, g: 0.13725491, b: 0, a: 1}
+    - _OldGrassColour: {r: 0.9622642, g: 0.77606386, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _YoungGrass: {r: 1, g: 1, b: 1, a: 1}
     - _YoungGrassColour: {r: 0.42204955, g: 0.8679245, b: 0, a: 0}
