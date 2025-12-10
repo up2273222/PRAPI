@@ -2,14 +2,13 @@
 #pragma kernel CullInvisibleInstances
 #pragma kernel resetInstanceCount
 
-
 #include "noiseSimplex.cginc"
+#include "HashFunction.cginc"
 
 struct FrustumPlane {
     float3 normal;
     float distance;
 };
-
 
 RWStructuredBuffer<float4> _VisibleGrassInstancesBuffer;
 
@@ -21,11 +20,7 @@ RWStructuredBuffer<float4> _AllInstancesBuffer;
 
 int _resolution;
 int _worldArea;
-
-
-
-
-
+float3 _meshHalfExtents;
 
 Texture2D<float4> _heightMapTex;
 SamplerState sampler_heightMapTex;
@@ -52,13 +47,22 @@ void GenerateAllInstances (uint3 id : SV_DispatchThreadID)
         pos.xz = (id.xy - float(_resolution) * 0.5f) * worldScale * _worldArea;
 
         float noiseFrequency = 0.06f;
-        float noiseValue = snoise(pos.xz * noiseFrequency);
         
-        pos.w = ((noiseValue + 1.0f) * 0.5f);
+        float n1 = snoise(pos.xz * 0.06f);
+        float n2 = snoise(pos.xz * 0.04f) * 0.5f;
+        float n3 = snoise(pos.xz * 0.02f) * 0.25f;
+        
+        float noiseVal = n1 + n2 + n3;
 
-        pos.x += noiseValue;
-        pos.z += noiseValue;
+        float hashPos = hash11(pos.xz) * 0.05f;
+        
+        pos.x += noiseVal;
+        pos.z += noiseVal;
+        pos.xz += hashPos;
 
+        float noiseValueW = snoise(pos.xz * noiseFrequency);
+        pos.w = ((noiseValueW + 1.0f) * 0.5f);
+        
         _AllInstancesBuffer[id.x + id.y * _resolution] = pos;
         
 
@@ -69,8 +73,57 @@ void GenerateAllInstances (uint3 id : SV_DispatchThreadID)
 [numthreads(8,8,1)]
 void CullInvisibleInstances (uint3 id : SV_DispatchThreadID)
 {
-   
     float4 pos = _AllInstancesBuffer[id.x + id.y * _resolution];
+    
+   
+    float3 min = pos - _meshHalfExtents;
+    float3 max = pos + _meshHalfExtents;
+   
+    for (int i = 0; i < 6; i++)
+    {
+        float3 boxPos;
+        float3 normal = _FrustumPlanesBuffer[i].normal;
+        float distance = _FrustumPlanesBuffer[i].distance;
+        
+        int result = 0;
+        
+        
+        
+        result += ((dot(normal,float4(min.x,min.y,min.z,1.0))+ distance<0.0)?1:0);
+        result += ((dot(normal,float4(max.x,min.y,min.z,1.0))+ distance<0.0)?1:0);
+        result += ((dot(normal,float4(min.x,max.y,min.z,1.0))+ distance<0.0)?1:0);
+        result += ((dot(normal,float4(max.x,max.y,min.z,1.0))+ distance<0.0)?1:0);
+        result += ((dot(normal,float4(min.x,min.y,max.z,1.0))+ distance<0.0)?1:0);
+        result += ((dot(normal,float4(max.x,min.y,max.z,1.0))+ distance<0.0)?1:0);
+        result += ((dot(normal,float4(min.x,max.y,max.z,1.0))+ distance<0.0)?1:0);
+        result += ((dot(normal,float4(max.x,max.y,max.z,1.0))+ distance<0.0)?1:0);
+        if (result == 8) return;
+        
+        
+        
+    }
+    
+    
+    /*
+    for (int i = 0; i < 6; i++)
+    {
+        float3 boxPos;
+        float3 normal = _FrustumPlanesBuffer[i].normal;
+        float distance = _FrustumPlanesBuffer[i].distance;
+        boxPos.x = (normal.x >= 0) ? min.x : max.x;
+        boxPos.y = (normal.y >= 0) ? min.y : max.y;
+        boxPos.z = (normal.z >= 0) ? min.z : max.z;
+        
+        float planeDist = dot(normal, boxPos) + distance;
+        
+        if (planeDist < 0)
+        {
+            return;
+        }
+    }
+    */
+    
+    /*
     for (int i = 0; i < 6; i++)
     {
         float ndotplusd = (dot(pos.xyz,_FrustumPlanesBuffer[i].normal ) + _FrustumPlanesBuffer[i].distance);
@@ -79,8 +132,9 @@ void CullInvisibleInstances (uint3 id : SV_DispatchThreadID)
             return;
         }
     }
+    */
+     
     
-
     uint writeIndex;
     InterlockedAdd(_ArgsBuffer[1],uint(3),writeIndex);
     uint instanceIndex = writeIndex/3;

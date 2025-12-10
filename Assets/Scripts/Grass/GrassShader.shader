@@ -1,22 +1,30 @@
 
+
 Shader "Custom/GrassShader"
 {
+
   Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _OldGrassColour ("OldGrassColour", Color) = (0,1,0,1)
+        _OldGrassColour ("OldGrassColour", Color) = (0,1,0,0)
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags {
+             "RenderType" = "Opaque"
+             
+             }
 
 
         Pass
         {
+            Blend off
+            ZWrite On
             Cull off
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            
 
             #include "UnityCG.cginc"
             #include "AutoLight.cginc"
@@ -44,6 +52,7 @@ Shader "Custom/GrassShader"
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
                 uint instanceid : TEXCOORD1;
+                float3 normal : NORMAL;
             };
 
             struct v2f
@@ -51,6 +60,7 @@ Shader "Custom/GrassShader"
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
                 uint instanceid : TEXCOORD1;
+                float3 normalWS : TEXCOORD2;
             };
             
 
@@ -114,6 +124,7 @@ Shader "Custom/GrassShader"
                   
                 
                 o.vertex = mul(UNITY_MATRIX_VP, worldPosition);
+                o.normalWS = UnityObjectToWorldNormal(v.normal);
                   
               
                 return o;
@@ -121,29 +132,41 @@ Shader "Custom/GrassShader"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                float4 col = tex2D(_MainTex,i.uv);
+                float3 lightColour = _LightColor0.xyz;
                 
-                clip(-(0.5 - col.a));
-                float3 lightDir = _WorldSpaceLightPos0.xyz;
-
-                uint grassIndex = i.instanceid / 3;
+                float4 grassTexCol = tex2D(_MainTex,i.uv);
+                float finalAlpha = grassTexCol.a;
                 
-                float4 agedCol = lerp(col,_OldGrassColour,GrassPositionsBufferShader[grassIndex].w);
-                col = lerp(col,agedCol,i.uv.y);
-                
-                
-
-                
-                float ndotl = DotClamped(lightDir, normalize(float3(0, 1, 0)));
-
+                clip(finalAlpha - 0.5f);
                
-
-    
-                return col * ndotl;
+                float ambientLightStrength = 0.1f;
+                float3 ambientLight = UNITY_LIGHTMODEL_AMBIENT.xyz * ambientLightStrength;
+                
+                uint grassIndex = i.instanceid / 3;
+                float4 agedCol = lerp(grassTexCol,_OldGrassColour,GrassPositionsBufferShader[grassIndex].w);
+                float4 finalGrassCol = lerp(grassTexCol,agedCol,i.uv.y);
+                
+                float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
+                float3 norm = normalize(i.normalWS);
+                
+                float3 diff = saturate(dot(norm,lightDir));
+                float3 diffuseLight = diff * lightColour;
+                
+                float3 finalCol = (ambientLight + diffuseLight ) * finalGrassCol.xyz;
+                
+                
+                
+                
+                
+                
+                
+                return float4(finalCol,finalAlpha);
                 //return float4(i.uv,0,1);
                
             }
+            
             ENDCG
         }
-    }
 }
+}
+        

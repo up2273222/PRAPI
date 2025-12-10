@@ -9,8 +9,6 @@ public class PlayerController : MonoBehaviour
     public Camera mainCamera;
     
     public InputActionReference moveAction;
-   
-  
     
     public int moveSpeed;
     
@@ -48,12 +46,7 @@ public class PlayerController : MonoBehaviour
         _cameraRight.Normalize();
         _movementDirection = _cameraForward * moveAction.action.ReadValue<Vector2>().y + _cameraRight * moveAction.action.ReadValue<Vector2>().x;
         _movementDirection.Normalize();
-      
-        
-      
     }
- 
-
     }
 
 
